@@ -91,3 +91,5 @@ ENV/
 /pytest.ini
 /variables.json
 /.idea
+/tests/_test_login.py
+/tests/_test_jr.py
