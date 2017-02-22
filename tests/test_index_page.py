@@ -1,14 +1,15 @@
-from pages.index_page import IndexPage
-from pages.home_page import HomePage
-from pages.logout_page import LogoutPage
 import time
-import requests
+
+import pytest
+
+from pages.home_page import HomePage
+from pages.index_page import IndexPage
+from pages.logout_page import LogoutPage
+from .base import BaseRecordTest
 
 
-class TestIndexPage(object):
-    def _check_link_request_code(self, url):
-        return requests.get(url, timeout=3).status_code == 200
-
+class TestIndexPage(BaseRecordTest):
+    @pytest.mark.flaky(reruns=3)
     def test_login_and_logout(self, base_url, selenium, existing_user):
         index_pg = IndexPage(base_url, selenium)
         home_pg = HomePage(base_url, selenium)
@@ -23,6 +24,7 @@ class TestIndexPage(object):
         home_pg.header.click_logout()
         assert logout_pg.header.is_user_not_login
 
+    @pytest.mark.flaky(reruns=3)
     def test_focus_pic_auto_run(self, base_url, selenium, uid_cookie):
         index_pg = IndexPage(base_url, selenium)
         index_pg.get_cookie_index_page('/', uid_cookie)
@@ -33,6 +35,7 @@ class TestIndexPage(object):
         link3 = index_pg.get_focus_pic_img_link()
         assert link1 != link2 != link3, '轮播图应该每个 4s 会有轮播， 但未检测到有自动轮播'
 
+    @pytest.mark.flaky(reruns=3)
     def test_hover_focus_pic_btn(self, base_url, selenium, uid_cookie):
         index_pg = IndexPage(base_url, selenium)
         index_pg.get_cookie_index_page('/', uid_cookie)
