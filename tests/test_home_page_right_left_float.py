@@ -12,7 +12,7 @@ from pages.home_page import HomePage
 
 
 class TestHomePage(BaseTest):
-    def _check_right_float(self, home_pg, base_info, no_phone):
+    def _check_right_float(self, home_pg, base_info, no_phone=False):
         href, link = home_pg.get_right_float_links(no_phone=no_phone)
         assert href is not None, base_info + "链接地址应该存在"
         assert link is not None, base_info + "应该有图片"
