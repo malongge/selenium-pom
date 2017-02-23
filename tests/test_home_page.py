@@ -5,13 +5,10 @@
 #
 
 import time
-import requests
-
-from pages.base_page import BasePage
-from pages.home_page import HomePage
-from .base import BaseRecordTest, BaseTest
 
 import pytest
+
+from .base import BaseTest
 class TestHomePage(BaseTest):
 
     @pytest.mark.flaky(reruns=3)

@@ -40,38 +40,38 @@ def terminate(process):
         call(r'taskkill /F /T /PID ' + str(process.pid))
 
 
-ffmpeg_command = os.environ['ffmpeg_command']
-video_base_path = os.environ['video_base_path']
+# ffmpeg_command = os.environ['ffmpeg_command']
+# video_base_path = os.environ['video_base_path']
 
 
-class BaseRecordTest(BaseTest):
-    def set_up_00(self, method):
-
-        # video save path should be "base path" + "test case module path" + "test case class" + "test case name"
-        module_name = self.__module__
-        if module_name == '__main__':
-            filename = sys.modules[self.__module__].__file__
-            module_name = os.path.splitext(os.path.basename(filename))[0]
-        module_path = module_name.replace('.', '\\')
-        dir_name = video_base_path + module_path
-        if not os.path.exists(dir_name):
-            os.makedirs(dir_name)
-
-        video_path = dir_name + '\{}-{}.avi'.format(self.__class__.__name__, method.__name__)
-
-        if os.path.exists(video_path):
-            os.remove(video_path)
-
-        process = Popen(
-            "{} {}".format(ffmpeg_command, video_path),
-            shell=True, stdout=PIPE, stderr=PIPE, stdin=PIPE)
-        self.__process = process
-
-    def tear_down_99(self, method):
-        # self.__process.terminate()
-        # os.killpg(self.__process.pid, signal.CTRL_C_EVENT)
-        # os.kill(self.__process.pid, signal.CTRL_C_EVENT)
-        # terminate(self.__process)
-
-        self.__process.stdin.write(b'q')
-        # self.__process.stdin.flush()
+# class BaseRecordTest(BaseTest):
+#     def set_up_00(self, method):
+#
+#         # video save path should be "base path" + "test case module path" + "test case class" + "test case name"
+#         module_name = self.__module__
+#         if module_name == '__main__':
+#             filename = sys.modules[self.__module__].__file__
+#             module_name = os.path.splitext(os.path.basename(filename))[0]
+#         module_path = module_name.replace('.', '\\')
+#         dir_name = video_base_path + module_path
+#         if not os.path.exists(dir_name):
+#             os.makedirs(dir_name)
+#
+#         video_path = dir_name + '\{}-{}.avi'.format(self.__class__.__name__, method.__name__)
+#
+#         if os.path.exists(video_path):
+#             os.remove(video_path)
+#
+#         process = Popen(
+#             "{} {}".format(ffmpeg_command, video_path),
+#             shell=True, stdout=PIPE, stderr=PIPE, stdin=PIPE)
+#         self.__process = process
+#
+#     def tear_down_99(self, method):
+#         # self.__process.terminate()
+#         # os.killpg(self.__process.pid, signal.CTRL_C_EVENT)
+#         # os.kill(self.__process.pid, signal.CTRL_C_EVENT)
+#         # terminate(self.__process)
+#
+#         self.__process.stdin.write(b'q')
+#         # self.__process.stdin.flush()

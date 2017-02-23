@@ -6,9 +6,9 @@
 
 import pytest
 
-from .base import BaseTest
-from pages.index_page import IndexPage
 from pages.home_page import HomePage
+from pages.index_page import IndexPage
+from .base import BaseTest
 
 
 class TestHomePage(BaseTest):
