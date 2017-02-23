@@ -5,16 +5,17 @@ import pytest
 from pages.home_page import HomePage
 from pages.index_page import IndexPage
 from pages.logout_page import LogoutPage
-from .base import BaseRecordTest
+from .base import BaseTest
 
 
-class TestIndexPage(BaseRecordTest):
+class TestIndexPage(BaseTest):
     @pytest.mark.flaky(reruns=3)
     def test_login_and_logout(self, base_url, selenium, existing_user):
         index_pg = IndexPage(base_url, selenium)
         home_pg = HomePage(base_url, selenium)
         logout_pg = LogoutPage(base_url, selenium)
         index_pg.get_relative_path('/')
+        index_pg.maximize_window()
         time.sleep(1)
         assert index_pg.header.is_user_not_login, '刚开始网页是没有登录， 但检测为登录了'
         index_pg.header.login(existing_user['username'], existing_user['password'])
