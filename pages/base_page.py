@@ -10,5 +10,9 @@ class BasePage(Page):
 
     def switch_to_second_window(self):
         handles = self.selenium.window_handles
-        self.selenium.switch_to_window(handles[1])
+        try:
+            handle = handles[1]
+        except IndexError:
+            handle = handles[0]
+        self.selenium.switch_to_window(handle)
 
