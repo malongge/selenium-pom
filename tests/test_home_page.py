@@ -18,11 +18,11 @@ class TestHomePage(BaseTest):
         pg.click_index_link()
         pg.switch_to_second_window()
         link1 = pg.get_focus_pic_img_link()
-        time.sleep(4)
+        time.sleep(5)
         link2 = pg.get_focus_pic_img_link()
-        time.sleep(4)
+        time.sleep(5)
         link3 = pg.get_focus_pic_img_link()
-        time.sleep(4)
+        time.sleep(5)
         link4 = pg.get_focus_pic_img_link()
         assert link1 != link2 != link3 != link4, '轮播图应该每个 4s 会有轮播， 但未检测到有自动轮播'
 
