@@ -11,7 +11,7 @@ import pytest
 from .base import BaseTest
 class TestHomePage(BaseTest):
 
-    @pytest.mark.flaky(reruns=3)
+    @pytest.mark.flaky(reruns=10)
     def test_home_focus_pic_auto_run(self, login):
 
         _, pg = login
@@ -24,7 +24,7 @@ class TestHomePage(BaseTest):
         link3 = pg.get_focus_pic_img_link()
         time.sleep(5)
         link4 = pg.get_focus_pic_img_link()
-        assert link1 != link2 != link3 != link4, '轮播图应该每个 4s 会有轮播， 但未检测到有自动轮播'
+        assert link1 != link2 != link3 != link4, '轮播图应该每个 5s 会有轮播， 但未检测到有自动轮播'
 
     @pytest.mark.flaky(reruns=3)
     def test_home_hover_focus_pic_btn(self, login):

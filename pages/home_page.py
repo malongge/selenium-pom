@@ -55,7 +55,6 @@ class HomePage(FocusPicMixin, BasePage):
         css_prop = a.value_of_css_property('background')
         groups = self.css_url_pat.findall(css_prop)
         url = groups[0] if groups else None
-        print(href, url)
         return href, url.replace('"', "")
 
     def get_right_float_links(self, no_phone=False):
@@ -69,7 +68,6 @@ class HomePage(FocusPicMixin, BasePage):
         else:
             img = self.find_element(*self._right_float_img_loc)
             link = img.get_attribute('src')
-        print(href, link)
         return href, link
 
 

@@ -1,1 +1,1 @@
-py.test --variable=E:\working\jiayuan\webui\variables.json --driver=Chrome -s %1 %2 %3
+py.test --variable=D:\webui\variables.json --driver=Chrome -s %1 %2 %3
