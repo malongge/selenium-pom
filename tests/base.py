@@ -5,6 +5,7 @@ import sys
 from subprocess import call, PIPE, Popen
 import requests
 
+
 class BaseTest(object):
     def get_methods(self, starting_with, reverse=False):
         methods = []
@@ -24,21 +25,30 @@ class BaseTest(object):
         for meth in self.get_methods("tear_down", reverse=True):
             meth(method)
 
-    def _check_link_request_code(self, url):
+    def _check_link_request_code(self, url: str):
         if url is None:
             return True
         try:
+
             return requests.get(url, timeout=5).status_code == 200
         except Exception as e:
             print(str(e))
 
-
+    def _check_session_request_code(self, selenium, url: str):
+        if url is None:
+            return True
+        try:
+            if url.startswith("https"):
+                return selenium("GET", url, verify=False, timeout=5).status_code == 200
+            else:
+                return selenium("GET", url, timeout=5).status_code == 200
+        except Exception as e:
+            print(str(e))
 
 
 def terminate(process):
     if process.poll() is None:
         call(r'taskkill /F /T /PID ' + str(process.pid))
-
 
 # ffmpeg_command = os.environ['ffmpeg_command']
 # video_base_path = os.environ['video_base_path']

@@ -3,6 +3,7 @@ from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.common.action_chains import ActionChains
 import contextlib
+from seleniumrequests.request import DriverWrapper
 
 class Page(object):
     """
@@ -11,7 +12,7 @@ class Page(object):
 
     def __init__(self, base_url, selenium):
         self.base_url = base_url
-        self.selenium = selenium
+        self.selenium = DriverWrapper(selenium).driver
         self.timeout = 60
         self._selenium_root = self._root_element if getattr(self, '_root_element', None) else self.selenium
 

@@ -25,7 +25,7 @@ class TestHomePage(BaseTest):
         assert href is not None, base_info + "链接地址应该存在"
         assert link is not None, base_info + "应该有图片"
 
-        assert self._check_link_request_code(href), base_info + "链接地址访问链接不存在或者有问题"
+        # assert self._check_link_request_code(home_pg.selenium, href), base_info + "链接地址访问链接不存在或者有问题"
         assert self._check_link_request_code(link), base_info + "图片没有显示"
 
     @pytest.mark.flaky(reruns=3)
