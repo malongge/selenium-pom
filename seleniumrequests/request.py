@@ -148,13 +148,13 @@ class DriverWrapper(object):
         setattr(self.driver, 'add_cookie', self.add_cookie)
         setattr(self.driver, 'request', self.request)
 
-    def add_cookie(self, cookie_dict):
-        try:
-            self.driver.add_cookie(cookie_dict)
-        except WebDriverException as exception:
-            details = json.loads(exception.msg)
-            if not (self.__is_phantomjs_211 and details['errorMessage'] == 'Unable to set Cookie'):
-                raise
+    # def add_cookie(self, cookie_dict):
+    #     try:
+    #         self.driver.add_cookie(cookie_dict)
+    #     except WebDriverException as exception:
+    #         details = json.loads(exception.msg)
+    #         if not (self.__is_phantomjs_211 and details['errorMessage'] == 'Unable to set Cookie'):
+    #             raise
 
     def request(self, method, url, **kwargs):
         if not self.__has_webdriver_request_headers:
