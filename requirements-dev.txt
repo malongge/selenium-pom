@@ -2,6 +2,7 @@ apipkg==1.4
 bidpom==2.0.1
 colorama==0.3.7
 execnet==1.4.1
+idna==2.5
 py==1.4.32
 PyPOM==1.1.1
 pytest==3.0.6
@@ -14,8 +15,11 @@ pytest-sugar==0.8.0
 pytest-variables==1.4
 pytest-xdist==1.15.0
 requests==2.12.1
+requests-file==1.4.1
 selenium==3.0.2
+six==1.10.0
 termcolor==1.1.0
+tldextract==2.0.2
 zope.component==4.3.0
 zope.event==4.2.0
 zope.interface==4.3.3
