@@ -145,7 +145,7 @@ class DriverWrapper(object):
         self.__is_phantomjs = driver.name == 'phantomjs'
         self.__is_phantomjs_211 = self.__is_phantomjs and driver.capabilities['version'] == '2.1.1'
         self.driver = driver
-        setattr(self.driver, 'add_cookie', self.add_cookie)
+        # setattr(self.driver, 'add_cookie', self.add_cookie)
         setattr(self.driver, 'request', self.request)
 
     # def add_cookie(self, cookie_dict):
