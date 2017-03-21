@@ -4,48 +4,43 @@
 # Created by malongge on 2017/2/16 
 #
 
-import time
-
 import pytest
 
 from .base import BaseTest
+
+
 class TestHomePage(BaseTest):
+    #
+    # def set_up_01(self):
+    #     pass
 
-    @pytest.mark.flaky(reruns=10)
-    def test_home_focus_pic_auto_run(self, login):
+    def _check_right_float(self, home_pg, base_info, no_phone=False):
+        href, link = home_pg.get_right_float_links(no_phone=no_phone)
+        assert href is not None, base_info + "链接地址应该存在"
+        assert link is not None, base_info + "应该有图片"
 
-        _, pg = login
-        pg.click_index_link()
-        pg.switch_to_second_window()
-        link1 = pg.get_focus_pic_img_link()
-        time.sleep(5)
-        link2 = pg.get_focus_pic_img_link()
-        time.sleep(5)
-        link3 = pg.get_focus_pic_img_link()
-        time.sleep(5)
-        link4 = pg.get_focus_pic_img_link()
-        assert link1 != link2 != link3 != link4, '轮播图应该每个 5s 会有轮播， 但未检测到有自动轮播'
+        assert self._check_link_request_code(href, home_pg), base_info + "链接地址访问链接不存在或者有问题"
+        assert self._check_link_request_code(link, home_pg), base_info + "图片没有显示"
 
-    @pytest.mark.flaky(reruns=3)
-    def test_home_hover_focus_pic_btn(self, login):
-        index_pg, home_pg = login
-        home_pg.click_index_link()
-        time.sleep(1)
-        home_pg.switch_to_second_window()
-        btns = index_pg.get_focus_pic_hover_buttons()
-        index_pg.hover(btns[0])
-        link1 = index_pg.get_focus_pic_link()
-        img1 = index_pg.get_focus_pic_img_link()
-        assert self._check_link_request_code(img1), '第一张轮播图：{} 不显示'.format(img1)
-        assert self._check_link_request_code(link1), '第一张轮播图链接地址:{}, 打不开'.format(link1)
-        index_pg.hover(btns[1])
-        link2 = index_pg.get_focus_pic_link()
-        img2 = index_pg.get_focus_pic_img_link()
-        assert self._check_link_request_code(img2), '第二张轮播图：{} 不显示'.format(img2)
-        assert self._check_link_request_code(link2), '第二张轮播图链接地址:{}, 打不开'.format(link2)
-        index_pg.hover(btns[2])
-        link3 = index_pg.get_focus_pic_link()
-        img3 = index_pg.get_focus_pic_img_link()
-        assert self._check_link_request_code(img3), '第三张轮播图：{} 不显示'.format(img3)
-        assert self._check_link_request_code(link3), '第三张轮播图链接地址:{}, 打不开'.format(link3)
-        assert img1 != img2 != img3, '轮播图应该在鼠标放到轮播按钮时进行切换， 但未检测到切换'
+    def _check_left_float(self, home_pg, base_info):
+        href, link = home_pg.get_left_float_links()
+        assert href is not None, base_info + "链接地址应该存在"
+        assert link is not None, base_info + "应该有图片"
+        assert self._check_link_request_code(link, home_pg), base_info + "图片 {} 没有显示".format(link)
+        assert self._check_link_request_code(href, home_pg), base_info + "图片没有显示"
+
+    @pytest.mark.flaky(reruns=1)
+    def test_float_show_with_phone_user(self, login):
+        ulg, home_pg = login
+        home_pg.home_page_and_close_layer()
+        base_info = '登录首页左浮层，'
+        self._check_left_float(home_pg, base_info)
+
+    @pytest.mark.flaky(reruns=1)
+    def test_float_with_nophone_user(self, nophone_login):
+        ulg, home_pg = nophone_login
+        home_pg.home_page_and_close_layer()
+        base_info = '非手机认证用户登录后的左浮层'
+        self._check_left_float(home_pg, base_info)
+        base_info = '非手机认证用户登录后的右浮层'
+        self._check_right_float(home_pg, base_info, True)

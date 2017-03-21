@@ -1,9 +1,14 @@
 from .base_page import BasePage
 from .page import Page
+from .login_page import _LoginPage
 from selenium.webdriver.common.by import By
+import time
 
 
-class FocusPicMixin(object):
+class IndexPage(_LoginPage):
+    _page_title = "世纪佳缘交友网：国内领先的在线婚恋交友网站，免费注册马上寻缘"
+
+    # 轮播图元素
     _focus_pic_loc = (By.CSS_SELECTOR, '#flash_id1 a')
     _focus_pic_img_loc = (By.CSS_SELECTOR, '#flash_id1 a img')
     _focus_pic_btn_loc = (By.CSS_SELECTOR, '#flash_id1_1 a')
@@ -19,36 +24,19 @@ class FocusPicMixin(object):
     def get_focus_pic_hover_buttons(self):
         return self.find_elements(*self._focus_pic_btn_loc)
 
+    def switch_to_index_page(self, home_page):
+        if self.is_the_current_page:
+            pass
+        else:
+            home_page.close_ad_intercept()
+            home_page.nav_to_page('http://www.jiayuan.com/')
+            time.sleep(3)
+            self.switch_to_second_window()
+            self.wait_for_element_to_be_visible(By.CSS_SELECTOR, '.flash')
 
-class IndexPage(FocusPicMixin, BasePage):
-    @property
-    def header(self):
-        return self.Header(self.base_url, self.selenium)
 
-    class Header(Page):
-        _login_form_locator = (By.ID, 'hder_login_form_new')
-        _username_input_locator = (By.CSS_SELECTOR, "#hder_login_form_new > input[name='name']")
-        _passwrod_input_locator = (By.CSS_SELECTOR, "#hder_login_form_new > input[name='password']")
-        _submit_locator = (By.CSS_SELECTOR, "button.btn_login.sprite")
-        _logout_locator = (By.CSS_SELECTOR, '#head_user_logout a')
-        _user_name_locator = (By.CSS_SELECTOR, '#head_user_nickname a')
 
-        def enter_password(self, value):
-            password = self.find_element(*self._passwrod_input_locator)
-            password.clear()
-            password.send_keys(value)
 
-        def enter_username(self, value):
-            username = self.find_element(*self._username_input_locator)
-            username.clear()
-            username.send_keys(value)
 
-        def login(self, username, password):
-            self.enter_username(username)
-            self.enter_password(password)
-            self.find_element(*self._submit_locator).click()
 
-        @property
-        def is_user_not_login(self):
-            return self.is_element_present(*self._login_form_locator)
 

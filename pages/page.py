@@ -5,6 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import contextlib
 from seleniumrequests.request import DriverWrapper
 
+
 class Page(object):
     """
     Base class for all Pages
@@ -16,11 +17,21 @@ class Page(object):
         self.timeout = 60
         self._selenium_root = self._root_element if getattr(self, '_root_element', None) else self.selenium
 
+    def get_base_url_request_cookie(self):
+        cook_list = self.selenium.get_cookies()
+        base_url = self.base_url[:-1]
+
+        ret = {}
+        for c in cook_list:
+            if base_url in c['domain']:
+                ret[c['name']] = c['value']
+        return ret
+
     @property
     def is_the_current_page(self):
         if getattr(self, '_page_title', None):
             page_title = self.page_title
-            assert self._page_title in page_title
+            return self._page_title in page_title
 
     @property
     def current_url(self):
@@ -136,9 +147,7 @@ class Page(object):
         ActionChains(self.selenium).move_to_element(element).perform()
 
 
-
 class PageRegion(Page):
-
     def __init__(self, base_url, selenium, element):
         self._root_element = element
         Page.__init__(self, base_url, selenium)

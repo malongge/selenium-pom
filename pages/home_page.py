@@ -1,53 +1,28 @@
-from .base_page import BasePage
+from .login_page import _LoginPage
 from .page import Page
-from .index_page import FocusPicMixin
 from selenium.webdriver.common.by import By
 import re
 
 
-class HomePage(FocusPicMixin, BasePage):
-    _ad_intercept_close_loc = (By.CSS_SELECTOR, '#usercp_dltc_div a')
-    _login_layer_frame_loc = (By.ID, 'login_layer')
-    _index_link_loc = (By.CSS_SELECTOR, "#jycm_head_nav_links_sub li a[href='http://www.jiayuan.com/']")
-    _left_float_loc = (By.CSS_SELECTOR, "#jy_cpfl_2_box .finance_redBox_img")
-    _right_float_img_loc = (By.CSS_SELECTOR, "#jy_cpfl_1_box a img")
-    _right_float_a_loc = (By.CSS_SELECTOR, "#jy_cpfl_1_box a")
-    _ad_nophone_intercept_close_loc = (By.CSS_SELECTOR, '#inv_send_close .pop_closed')
+class HomePage(_LoginPage):
+    _page_title = "我的佳缘_世纪佳缘交友网"
 
-    css_url_pat = re.compile(r'url\((.+)\)')
+    def home_page_and_close_layer(self):
+        """确定是我的佳缘主页， 如果不是进行导航跳转"""
 
-    @property
-    def header(self):
-        return self.Header(self.base_url, self.selenium)
+        if self.is_the_current_page:
+            pass
+        else:
+            self.nav_to_home_page()
+        # 跳转后，确认 title 没有问题
+        assert self.is_the_current_page
+        self.close_ad_intercept()
 
-    class Header(Page):
-        _logout_locator = (By.CSS_SELECTOR, '#head_user_logout a')
-        _user_name_locator = (By.CSS_SELECTOR, '#head_user_nickname a')
 
-        @property
-        def is_user_logged_in(self):
-            return self.is_element_visible(*self._logout_locator)
 
-        @property
-        def username_text(self):
-            return self.find_element(*self._user_name_locator).text
 
-        def click_logout(self):
-            self.find_element(*self._logout_locator).click()
-
-    def close_ad_intercept(self):
-        with self.focus_frame(self._login_layer_frame_loc):
-            close_btn = self.find_element(*self._ad_intercept_close_loc)
-            close_btn.click()
-
-    def close_nophone_ad_intercept(self):
-        with self.focus_frame(self._login_layer_frame_loc):
-            nophone_close_btn = self.find_element(*self._ad_nophone_intercept_close_loc)
-            nophone_close_btn.click()
-
-    def click_index_link(self):
-        link = self.find_element(*self._index_link_loc)
-        link.click()
+class NoPhoneHomePage(HomePage):
+    _left_float_loc = (By.ID, "jyfc_yx_left_a")
 
     def get_left_float_links(self):
         a = self.find_element(*self._left_float_loc)
@@ -56,18 +31,3 @@ class HomePage(FocusPicMixin, BasePage):
         groups = self.css_url_pat.findall(css_prop)
         url = groups[0] if groups else None
         return href, url.replace('"', "")
-
-    def get_right_float_links(self, no_phone=False):
-        a = self.find_element(*self._right_float_a_loc)
-        href = a.get_attribute('href')
-        if no_phone:
-            css_prop = a.value_of_css_property('background')
-            groups = self.css_url_pat.findall(css_prop)
-            url = groups[0] if groups else None
-            link = url.replace('"', "")
-        else:
-            img = self.find_element(*self._right_float_img_loc)
-            link = img.get_attribute('src')
-        return href, link
-
-

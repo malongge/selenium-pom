@@ -16,3 +16,5 @@ class BasePage(Page):
             handle = handles[0]
         self.selenium.switch_to_window(handle)
 
+
+

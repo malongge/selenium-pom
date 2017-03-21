@@ -4,6 +4,7 @@ import os
 import sys
 from subprocess import call, PIPE, Popen
 import requests
+from pages.https import session
 
 
 class BaseTest(object):
@@ -25,25 +26,25 @@ class BaseTest(object):
         for meth in self.get_methods("tear_down", reverse=True):
             meth(method)
 
-    def _check_link_request_code(self, url: str):
+    def _check_link_request_code(self, url: str, page_obj):
         if url is None:
             return True
-        try:
+        if url.startswith('https'):
+            s = session()
+        else:
+            s = requests.session()
+        return s.get(url, cookies=page_obj.get_base_url_request_cookie(), timeout=5).status_code == 200
 
-            return requests.get(url, timeout=5).status_code == 200
-        except Exception as e:
-            print(str(e))
-
-    def _check_session_request_code(self, selenium, url: str):
-        if url is None:
-            return True
-        try:
-            if url.startswith("https"):
-                return selenium("GET", url, verify=False, timeout=5).status_code == 200
-            else:
-                return selenium("GET", url, timeout=5).status_code == 200
-        except Exception as e:
-            print(str(e))
+    # def _check_session_request_code(self, selenium, url: str):
+    #     if url is None:
+    #         return True
+    #     try:
+    #         if url.startswith("https"):
+    #             return selenium("GET", url, verify=False, timeout=5).status_code == 200
+    #         else:
+    #             return selenium("GET", url, timeout=5).status_code == 200
+    #     except Exception as e:
+    #         print(str(e))
 
 
 def terminate(process):

@@ -27,17 +27,28 @@ def uid_cookie(stored_users):
     return stored_users['cookie']
 
 
+def _login(base_url, selenium, PageClass, user_dict):
+    from pages.unlogin_page import UnloginPage
+    from selenium.webdriver.common.by import By
+    unlogin_pg = UnloginPage(base_url, selenium)
+    home_pg = PageClass(base_url, selenium)
+    unlogin_pg.get_relative_path('/')
+    unlogin_pg.maximize_window()
+    unlogin_pg.header.login(user_dict['username'], user_dict['password'])
+    home_pg.wait_for_element_to_be_visible(By.ID, 'jycm_head_nav')
+    return unlogin_pg, home_pg
+
+
 @pytest.fixture(scope='function')
 def login(base_url, selenium, existing_user):
-    from pages.index_page import IndexPage
     from pages.home_page import HomePage
-    login_pg = IndexPage(base_url, selenium)
-    home_pg = HomePage(base_url, selenium)
-    login_pg.get_relative_path('/')
-    login_pg.maximize_window()
-    login_pg.header.login(existing_user['username'], existing_user['password'])
-    home_pg.close_ad_intercept()
-    return login_pg, home_pg
+    return _login(base_url, selenium, HomePage, existing_user)
+
+
+@pytest.fixture(scope='function')
+def nophone_login(base_url, selenium, nophone_user):
+    from pages.home_page import NoPhoneHomePage
+    return _login(base_url, selenium, NoPhoneHomePage, nophone_user)
 
 
 def pytest_addoption(parser):
