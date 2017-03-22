@@ -1,7 +1,6 @@
-from .login_page import _LoginPage
-from .page import Page
 from selenium.webdriver.common.by import By
-import re
+
+from .login_page import _LoginPage
 
 
 class HomePage(_LoginPage):
@@ -25,6 +24,7 @@ class NoPhoneHomePage(HomePage):
     _left_float_loc = (By.ID, "jyfc_yx_left_a")
 
     def get_left_float_links(self):
+        self.wait_for_element_to_be_visible(*self._left_float_loc)
         a = self.find_element(*self._left_float_loc)
         href = a.get_attribute('href')
         css_prop = a.value_of_css_property('background')

@@ -1,8 +1,8 @@
-from .base_page import BasePage
-from .page import Page
-from .login_page import _LoginPage
-from selenium.webdriver.common.by import By
 import time
+
+from selenium.webdriver.common.by import By
+
+from .login_page import _LoginPage
 
 
 class IndexPage(_LoginPage):
@@ -18,6 +18,7 @@ class IndexPage(_LoginPage):
         return elem.get_attribute('href')
 
     def get_focus_pic_img_link(self):
+        self.wait_for_element_to_be_visible(*self._focus_pic_img_loc)
         elem = self.find_element(*self._focus_pic_img_loc)
         return elem.get_attribute('src')
 

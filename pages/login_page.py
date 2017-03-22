@@ -75,6 +75,7 @@ class _LoginPage(BasePage):
                 print("nophone", str(e))
 
     def get_left_float_links(self):
+        self.wait_for_element_to_be_visible(*self._left_float_loc)
         a = self.find_element(*self._left_float_loc)
         href = a.get_attribute('href')
         css_prop = a.value_of_css_property('background')

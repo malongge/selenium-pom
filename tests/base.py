@@ -1,9 +1,8 @@
 import inspect
-import signal
-import os
-import sys
-from subprocess import call, PIPE, Popen
+from subprocess import call
+
 import requests
+
 from pages.https import session
 
 
