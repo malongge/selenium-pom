@@ -6,6 +6,10 @@ from .login_page import _LoginPage
 class HomePage(_LoginPage):
     _page_title = "我的佳缘_世纪佳缘交友网"
 
+    # 元素定位
+    _inbox_loc = (By.CSS_SELECTOR, '.cp-menu-card-mail .menu-left')
+    _login_layer_ad_loc = (By.ID, 'usercp_dltc_div')
+
     def home_page_and_close_layer(self):
         """确定是我的佳缘主页， 如果不是进行导航跳转"""
 
@@ -16,6 +20,17 @@ class HomePage(_LoginPage):
         # 跳转后，确认 title 没有问题
         assert self.is_the_current_page
         self.close_ad_intercept()
+
+    def click_inbox(self):
+        self.wait_for_element_to_be_visible(*self._inbox_loc)
+        inbox = self.find_element(*self._inbox_loc)
+        inbox.click()
+        
+    def check_login_layer(self):
+        with self.focus_frame(self._login_layer_frame_loc):
+            self.wait_for_element_present(*self._login_layer_ad_loc)
+            assert self.find_element(*self._login_layer_ad_loc)
+
 
 
 

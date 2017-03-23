@@ -36,6 +36,15 @@ class TestHomePage(BaseTest):
         base_info = '登录首页左浮层，'
         self._check_left_float(home_pg, base_info)
 
+    def test_login_layer(self, login):
+        """检查弹出的拦截层是否出现"""
+        ulg, home_pg = login
+        home_pg.check_login_layer()
+
+    def test_nophone_login_layer(self, nophone_login):
+        ulg, home_pg = nophone_login
+        home_pg.check_login_layer()
+
     @pytest.mark.flaky(reruns=1)
     def test_float_with_nophone_user(self, nophone_login):
         ulg, home_pg = nophone_login
@@ -44,3 +53,4 @@ class TestHomePage(BaseTest):
         self._check_left_float(home_pg, base_info)
         base_info = '非手机认证用户登录后的右浮层'
         self._check_right_float(home_pg, base_info, True)
+

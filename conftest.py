@@ -53,3 +53,10 @@ def nophone_login(base_url, selenium, nophone_user):
 
 def pytest_addoption(parser):
     parser.addini('custom_value', 'documentation of my custom value')
+
+#
+# def pytest_runtest_setup(item):
+#     print(item.__dict__)
+#     if 'once' in item.name and not item.config.getoption("--once"):
+#         pytest.skip("need --once option to run")
+
