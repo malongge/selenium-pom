@@ -11,6 +11,8 @@ class InboxPage(_LoginPage):
     _mail_ad_layer_loc = (By.CSS_SELECTOR, '.mail_layer')
     _mail_ad_layer_close_loc = (By.CSS_SELECTOR, '.mail_layer .mail_layerClose')
 
+    _vip_top_ad_loc = (By.ID, 'ad_pos_pcweb_67')
+
     def check_inbox_layer(self):
         with self.focus_frame(self._inbox_frame_loc):
             self.wait_for_element_present(*self._mail_ad_layer_loc)
@@ -21,6 +23,9 @@ class InboxPage(_LoginPage):
             self.wait_for_element_present(*self._mail_ad_layer_loc)
             close_link = self.find_element(*self._mail_ad_layer_close_loc)
             close_link.close()
+
+    def check_vip_ad_exist(self):
+        assert self.find_element(*self._vip_top_ad_loc)
 
 
 
