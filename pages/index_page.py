@@ -13,6 +13,10 @@ class IndexPage(_LoginPage):
     _focus_pic_img_loc = (By.CSS_SELECTOR, '#flash_id1 a img')
     _focus_pic_btn_loc = (By.CSS_SELECTOR, '#flash_id1_1 a')
 
+    index_url = 'http://www.jiayuan.com/'
+
+    _wait_for_visible_loc = (By.CSS_SELECTOR, '.flash')
+
     def get_focus_pic_link(self):
         elem = self.find_element(*self._focus_pic_loc)
         return elem.get_attribute('href')
@@ -30,10 +34,10 @@ class IndexPage(_LoginPage):
             pass
         else:
             home_page.close_ad_intercept()
-            home_page.nav_to_page('http://www.jiayuan.com/')
+            home_page.nav_to_page(self.index_url)
             time.sleep(3)
             self.switch_to_second_window()
-            self.wait_for_element_to_be_visible(By.CSS_SELECTOR, '.flash')
+            self.wait_for_element_to_be_visible(*self._wait_for_visible_loc)
 
 
 

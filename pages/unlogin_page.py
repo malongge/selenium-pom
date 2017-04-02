@@ -13,6 +13,12 @@ class UnloginPage(BasePage):
     _focus_pic_img_loc = (By.CSS_SELECTOR, '#flash_id1 a img')
     _focus_pic_btn_loc = (By.CSS_SELECTOR, '#flash_id1_1 a')
 
+
+    #广告位元素
+    _write_hand_img_loc = (By.CSS_SELECTOR, '#ad_pos_pcweb_34 img')
+
+    _focus_pic_right_below_a_loc = (By.CSS_SELECTOR, '#ad_pos_pcweb_35 a')
+
     def get_focus_pic_link(self):
         elem = self.find_element(*self._focus_pic_loc)
         return elem.get_attribute('href')
@@ -23,6 +29,8 @@ class UnloginPage(BasePage):
 
     def get_focus_pic_hover_buttons(self):
         return self.find_elements(*self._focus_pic_btn_loc)
+
+
 
     @property
     def header(self):

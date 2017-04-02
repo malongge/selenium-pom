@@ -56,3 +56,11 @@ class TestUnloginPage(BaseTest):
 
         for index in range(0, len(img_links) - 1):
             assert img_links[index] != img_links[index + 1], '轮播图应该在鼠标放到轮播 {} 按钮时进行切换， 但未检测到切换'.format(index + 1)
+
+    def test_right_hand_ad(self, unlogin_page):
+        """未登录页面 ad 34"""
+        self._check_img(unlogin_page._write_hand_img_loc, unlogin_page, '34')
+
+    def test_focus_pic_right_below_ad(self, unlogin_page):
+        """未登录页面 ad 35"""
+        self._check_a_and_img(unlogin_page._focus_pic_right_below_a_loc, unlogin_page, '35')

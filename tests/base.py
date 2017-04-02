@@ -7,6 +7,8 @@ from pages.https import session
 
 
 class BaseTest(object):
+    TIMEOUTSETTING = 5
+
     def get_methods(self, starting_with, reverse=False):
         methods = []
         members = inspect.getmembers(self, predicate=inspect.ismethod)
@@ -28,11 +30,26 @@ class BaseTest(object):
     def _check_link_request_code(self, url: str, page_obj):
         if url is None:
             return True
+        s = self._get_session(url)
+        return s.get(url, cookies=page_obj.get_base_url_request_cookie(), timeout=self.TIMEOUTSETTING).status_code == 200
+
+    def _get_session(self, url):
         if url.startswith('https'):
             s = session()
         else:
             s = requests.session()
-        return s.get(url, cookies=page_obj.get_base_url_request_cookie(), timeout=5).status_code == 200
+        return s
+
+    def _check_img(self, img_elem, page_obj, ad_id):
+        img_url = page_obj.get_img_link(img_elem)
+        s = requests.session()
+        assert s.get(img_url, timeout=self.TIMEOUTSETTING).status_code == 200, '{} 广告位不显示'.format(ad_id)
+
+    def _check_a_and_img(self, a_elem, page_obj, ad_id):
+        a_url, img_url = page_obj.get_a_and_img_links(a_elem)
+        assert requests.get(a_url, timeout=self.TIMEOUTSETTING).status_code == 200, '{} 广告位的跳转链接出现错误'.format(ad_id)
+        assert requests.get(img_url, timeout=self.TIMEOUTSETTING).status_code == 200, '{} 广告位不显示'.format(ad_id)
+
 
     # def _check_session_request_code(self, selenium, url: str):
     #     if url is None:

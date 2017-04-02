@@ -54,3 +54,11 @@ class TestHomePage(BaseTest):
         base_info = '非手机认证用户登录后的右浮层'
         self._check_right_float(home_pg, base_info, True)
 
+    @pytest.mark.flaky(reruns=1)
+    def test_home_pg_bottom_ad(self, login):
+        ulg, home_pg = login
+        home_pg.home_page_and_close_layer()
+        self._check_a_and_img(home_pg._bottom_ad_a_log, home_pg, '33')
+
+
+

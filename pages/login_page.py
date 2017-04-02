@@ -21,6 +21,9 @@ class _LoginPage(BasePage):
 
     css_url_pat = re.compile(r'url\((.+)\)')
 
+    # ad 元素
+    _bottom_ad_a_log = (By.CSS_SELECTOR, "#ad_pos_pcweb_56 a")
+
     def nav_to_home_page(self):
         self.nav_to_page('http://usercp.jiayuan.com/')
         time.sleep(2)
@@ -38,6 +41,7 @@ class _LoginPage(BasePage):
     class Header(Page):
         _logout_locator = (By.CSS_SELECTOR, '#head_user_logout a')
         _user_name_locator = (By.CSS_SELECTOR, '#head_user_nickname a')
+        _uid_loc = (By.ID, 'head_user_uid')
 
         @property
         def is_user_logged_in(self):
@@ -49,6 +53,9 @@ class _LoginPage(BasePage):
 
         def click_logout(self):
             self.find_element(*self._logout_locator).click()
+
+        def click_uid(self):
+            self.find_element(*self._uid_loc).click()
 
     def nav_to_page(self, href):
         link = self.find_element(By.CSS_SELECTOR, self._nav_link.format(href))

@@ -6,11 +6,21 @@ from .base import BaseTest
 
 
 class TestIndexPage(BaseTest):
-    @pytest.mark.flaky(reruns=1)
-    def test_index_focus_pic_auto_run(self, base_url, selenium, login):
+
+    @pytest.fixture(autouse=True)
+    def _go_to_index_page(self, request, base_url, selenium, login):
         _, pg = login
+        # self.home_pg = pg
         index_pg = IndexPage(base_url, selenium)
         index_pg.switch_to_index_page(pg)
+        self.index_pg = index_pg
+        # yield
+
+    @pytest.mark.flaky(reruns=1)
+    def test_index_focus_pic_auto_run(self):
+        # pg = self.home_pg
+        index_pg = self.index_pg
+        # index_pg.switch_to_index_page(pg)
         # 根据按钮的数量来确定轮播图的数量
         btns = index_pg.get_focus_pic_hover_buttons()
         assert len(btns) > 1
@@ -26,11 +36,31 @@ class TestIndexPage(BaseTest):
             assert links[index] != links[index + 1], '轮播第 {} 张链接地址为 {} 应该在 4s 后轮播， 但未检测到有轮播'.format(index, value)
 
 
+    # @pytest.mark.flaky(reruns=1)
+    # def test_index_focus_pic_auto_run(self, base_url, selenium, login):
+    #     _, pg = login
+    #     index_pg = IndexPage(base_url, selenium)
+    #     index_pg.switch_to_index_page(pg)
+    #     # 根据按钮的数量来确定轮播图的数量
+    #     btns = index_pg.get_focus_pic_hover_buttons()
+    #     assert len(btns) > 1
+    #
+    #     # 轮播图每 4s 进行切换， 注意在执行的时候，鼠标不要放到轮播图上， 否则会影响测试结果
+    #     links = []
+    #     for _ in btns:
+    #         link = index_pg.get_focus_pic_img_link()
+    #         links.append(link)
+    #         time.sleep(4)
+    #
+    #     for index, value in enumerate(links[:-1]):
+    #         assert links[index] != links[index + 1], '轮播第 {} 张链接地址为 {} 应该在 4s 后轮播， 但未检测到有轮播'.format(index, value)
+
+
     @pytest.mark.flaky(reruns=1)
-    def test_index_hover_focus_pic_btn(self, base_url, selenium, login):
-        _, pg = login
-        index_pg = IndexPage(base_url, selenium)
-        index_pg.switch_to_index_page(pg)
+    def test_index_hover_focus_pic_btn(self):
+        # pg = self.home_pg
+        index_pg = self.index_pg
+        # index_pg.switch_to_index_page(pg)
         # 根据按钮的数量来确定轮播图的数量
         btns = index_pg.get_focus_pic_hover_buttons()
         assert len(btns) > 1

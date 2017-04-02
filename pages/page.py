@@ -4,18 +4,70 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotVisible
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
+from os.path import join, abspath, dirname, exists
+import os
+import json
+
+BASE_DIR = abspath(
+    join(
+        abspath(dirname(__file__)), ".."
+    )
+)
+
+
+def get_cookie_dir():
+    cookie_dir = join(BASE_DIR, '.cookie_dumps')
+    if not exists(cookie_dir):
+        os.makedirs(cookie_dir)
+    return cookie_dir
 
 
 class Page(object):
     """
     Base class for all Pages
     """
+    cookie_base_path = get_cookie_dir()
 
     def __init__(self, base_url, selenium):
         self.base_url = base_url
         self.selenium = selenium
         self.timeout = 60
         self._selenium_root = self._root_element if getattr(self, '_root_element', None) else self.selenium
+
+    @classmethod
+    def make_cookie_dir_path(cls):
+        temp_path = join(cls.cookie_base_path, cls.__module__.replace('.', os.sep))
+        if not exists(temp_path):
+            os.makedirs(temp_path)
+        return temp_path
+
+    def exist_cookie(self):
+        cookie_path = self._cookie_ab_path()
+        return exists(cookie_path)
+
+    def _cookie_ab_path(self):
+        bath_path = self.make_cookie_dir_path()
+        cookie_path = join(bath_path, self.__class__.__name__ + '.json')
+        return cookie_path
+
+    def dump_cookie(self):
+        cookie_path = self._cookie_ab_path()
+        if not exists(cookie_path):
+            with open(cookie_path, 'w', encoding='utf-8') as f:
+                json.dump(self.selenium.get_cookies(), f)
+
+    def load_cookie(self):
+        cookie_path = self._cookie_ab_path()
+        with open(cookie_path, 'r', encoding='utf-8') as f:
+            json_cookie = json.load(f)
+        for c in json_cookie:
+            self.selenium.add_cookie(c)
+
+    @classmethod
+    def clean_cookie(cls):
+        temp_path = join(cls.cookie_base_path, cls.__module__.replace('.', os.sep))
+        if exists(temp_path):
+            os.removedirs(temp_path)
 
     def get_base_url_request_cookie(self):
         cook_list = self.selenium.get_cookies()
